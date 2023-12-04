@@ -8,6 +8,7 @@ export const getRandomCoffee = async (load?: typeof fetch): Promise<Coffee> => {
   return {
     ...coffee,
     blendName: coffee.blend_name,
-    notes: coffee.notes.split(',')
+    notes: coffee.notes.split(','),
+    imgSrc: 'https://loremflickr.com/500/500/coffee_bean'
   };
 };

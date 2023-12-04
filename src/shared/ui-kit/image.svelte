@@ -5,9 +5,18 @@
 
   export let uid: string | undefined = undefined;
 
+  export let maxWidth: number | undefined = undefined;
+
+  export let maxHeight: number | undefined = undefined;
+
   let showPlaceholder: boolean = true;
 
   let image: HTMLImageElement | undefined;
+
+  $: size = {
+    maxWidth: `--max-width: ${maxWidth ? `${maxWidth}px` : 'auto'};`,
+    maxHeight: `--max-height: ${maxHeight ? `${maxHeight}px` : 'auto'};`
+  };
 
   const handleLoad = () => {
     showPlaceholder = false;
@@ -18,7 +27,7 @@
   });
 </script>
 
-<div class="image" class:_loading={showPlaceholder}>
+<div class="image" class:_loading={showPlaceholder} style="{size.maxWidth}{size.maxHeight}">
   {#if src !== undefined}
     <img
       src={`${src}${uid ? `?${uid}` : ''}`}
@@ -33,10 +42,19 @@
   .image {
     margin: 0 0 1rem;
     font-size: 0;
+    max-width: var(--max-width);
+    max-height: var(--max-height);
 
     &._loading {
-      width: 300px;
-      min-height: 300px;
+      width: 100%;
+      height: var(--max-height);
+
+      @media screen and (min-width: 992px) {
+        & {
+          width: var(--max-width);
+          height: var(--max-height);
+        }
+      }
     }
 
     & > img {

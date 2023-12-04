@@ -5,4 +5,8 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Coffee list</title>
+</svelte:head>
+
 <Coffee serverLoadedCoffee={data.coffee} />

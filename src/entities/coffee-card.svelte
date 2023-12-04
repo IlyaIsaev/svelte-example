@@ -4,11 +4,20 @@
   import Image from '$shared/ui-kit/image.svelte';
 
   export let coffee: Coffee | undefined = undefined;
+
+  let maxCardWidth = 300;
 </script>
 
-<div class="card">
+<div class="card" style="--max-card-width: {maxCardWidth}px">
   {#if coffee}
-    <Image src="https://loremflickr.com/500/500/coffee_bean" uid={coffee.uid} />
+    <div class="image">
+      <Image
+        src={coffee.imgSrc}
+        uid={coffee.uid}
+        maxWidth={maxCardWidth}
+        maxHeight={maxCardWidth}
+      />
+    </div>
 
     <div class="sub_header">
       <span>
@@ -33,7 +42,9 @@
       </div>
     </div>
   {:else}
-    <Image />
+    <div class="image">
+      <Image maxWidth={maxCardWidth} maxHeight={maxCardWidth} />
+    </div>
     <div class="sub_header _loading"></div>
     <div class="title _loading"></div>
     <div class="sub_title _loading"></div>
@@ -48,7 +59,18 @@
 <style>
   .card {
     width: 100%;
-    max-width: 300px;
+
+    @media screen and (min-width: 992px) {
+      & {
+        max-width: var(--max-card-width);
+      }
+    }
+  }
+
+  .image {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .title {

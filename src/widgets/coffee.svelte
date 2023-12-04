@@ -1,18 +1,26 @@
 <script lang="ts">
   import CoffeeCard from '$entities/coffee-card.svelte';
   import type { Coffee } from '$shared/types/Coffee';
+  import { afterUpdate } from 'svelte';
   import LoadCoffee from '../features/load-coffee.svelte';
 
   export let serverLoadedCoffee: Coffee;
 
+  let coffeeListEl: HTMLDivElement;
+
   let coffeeList: Promise<Coffee>[] = [];
 
-  const handleCoffeeLoad = (event: CustomEvent<Promise<Coffee>>) =>
-    (coffeeList = [...coffeeList, event.detail]);
+  const handleCoffeeLoad = (event: CustomEvent<Promise<Coffee>>) => {
+    coffeeList = [...coffeeList, event.detail];
+  };
+
+  afterUpdate(() => {
+    coffeeListEl.scroll({ top: coffeeListEl.scrollHeight, behavior: 'smooth' });
+  });
 </script>
 
 <div class="coffee_widget">
-  <div class="list">
+  <div class="list" bind:this={coffeeListEl}>
     <div class="coffee_card">
       <CoffeeCard coffee={serverLoadedCoffee} />
     </div>
@@ -24,7 +32,7 @@
         {:then value}
           <CoffeeCard coffee={value} />
         {:catch}
-          <p>Something went wrong. Reload page please.</p>
+          <p>Something went wrong. Reload a page please.</p>
         {/await}
       </div>
     {/each}
@@ -36,6 +44,7 @@
 <style>
   .coffee_widget {
     display: flex;
+    max-width: 100%;
     flex-direction: column;
   }
 
